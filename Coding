@@ -1,0 +1,71 @@
+print("=" * 45)
+print("       CREDIT CARD INFORMATION CHECKER")
+print("=" * 45)
+
+card_number = input("Enter a test card number: ")
+
+# Remove spaces and hyphens
+card_number = card_number.replace(" ", "")
+card_number = card_number.replace("-", "")
+
+# Check input
+if not card_number.isdigit():
+    print("\nERROR: Card number must contain digits only.")
+
+elif len(card_number) < 13 or len(card_number) > 19:
+    print("\nERROR: Card number length is not supported.")
+
+else:
+    # Identify card network using common prefix patterns
+    if card_number.startswith("4"):
+        card_type = "Visa"
+
+    elif card_number[:2] in ["51", "52", "53", "54", "55"]:
+        card_type = "Mastercard"
+
+    elif card_number[:2] in ["34", "37"]:
+        card_type = "American Express"
+
+    elif card_number.startswith("6011") or card_number.startswith("65"):
+        card_type = "Discover"
+
+    else:
+        card_type = "Unknown / Other Network"
+
+    # Luhn checksum
+    total = 0
+    double_digit = False
+
+    for digit in card_number[::-1]:
+        number = int(digit)
+
+        if double_digit:
+            number = number * 2
+
+            if number > 9:
+                number = number - 9
+
+        total = total + number
+        double_digit = not double_digit
+
+    # Display results
+    print("\n" + "=" * 45)
+    print("             CHECKING RESULTS")
+    print("=" * 45)
+
+    print("Card Network:", card_type)
+    print("Number Length:", len(card_number))
+
+    if total % 10 == 0:
+        print("Luhn Check: PASSED")
+        print("Format Check: PASSED")
+        print("\nResult: Number has a valid checksum.")
+    else:
+        print("Luhn Check: FAILED")
+        print("Format Check: FAILED")
+        print("\nResult: Number has an invalid checksum.")
+
+    print("\nActual card existence: NOT VERIFIED")
+    print("Active status: NOT VERIFIED")
+
+    print("=" * 45)
